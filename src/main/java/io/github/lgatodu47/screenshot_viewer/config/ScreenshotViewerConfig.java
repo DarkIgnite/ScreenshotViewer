@@ -2,6 +2,7 @@ package io.github.lgatodu47.screenshot_viewer.config;
 
 import io.github.lgatodu47.catconfig.CatConfig;
 import io.github.lgatodu47.catconfig.CatConfigLogger;
+import io.github.lgatodu47.catconfig.ConfigOption;
 import io.github.lgatodu47.catconfig.ConfigOptionAccess;
 import io.github.lgatodu47.catconfigmc.MinecraftConfigSides;
 import net.fabricmc.loader.api.FabricLoader;
@@ -31,5 +32,17 @@ public class ScreenshotViewerConfig extends CatConfig {
         ConfigWatcher watcher = new ConfigWatcher("Screenshot Viewer's Config Watcher");
         watcher.start();
         return watcher;
+    }
+
+    public boolean getBool(ConfigOption<Boolean> option) {
+        return get(option).filter(Boolean::booleanValue).isPresent();
+    }
+
+    public boolean getBoolOrTrue(ConfigOption<Boolean> option) {
+        return get(option).filter(b -> !b).isEmpty();
+    }
+
+    public <E extends Enum<E>> boolean enumEquals(ConfigOption<E> option, E value) {
+        return get(option).filter(value::equals).isPresent();
     }
 }

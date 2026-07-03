@@ -21,20 +21,22 @@ public class ScreenshotViewerOptions {
     public static final ConfigOption<WidgetPosition> PAUSE_MENU_BUTTON_POSITION = BUILDER.put(new WidgetPositionOption("pause_menu_button_position", null, "ingame"));
     public static final ConfigOption<Boolean> SHOW_BUTTON_ON_TITLE_SCREEN = BUILDER.createBool("show_button_on_title_screen", true);
     public static final ConfigOption<WidgetPosition> TITLE_SCREEN_BUTTON_POSITION = BUILDER.put(new WidgetPositionOption("title_screen_button_position", null, "ingame"));
-    public static final ConfigOption<Boolean> REDIRECT_SCREENSHOT_CHAT_LINKS = BUILDER.createBool("redirect_screenshot_chat_links", false);
+    public static final ConfigOption<SavedScreenshotMessageState> SAVED_SCREENSHOT_MESSAGE_STATE = BUILDER.createEnum("saved_screenshot_message_state", SavedScreenshotMessageState.class, SavedScreenshotMessageState.OPEN_MANAGER);
+    public static final ConfigOption<Boolean> SAVE_SCREENSHOT_TO_CLIPBOARD = BUILDER.createBool("save_screenshot_to_clipboard", false);
 
     static {
         BUILDER.inCategory("ingui");
     }
     public static final ConfigOption<File> SCREENSHOTS_FOLDER = BUILDER.put(new FileOption("screenshots_folder", ScreenshotViewerUtils::getVanillaScreenshotsFolder, "ingui"));
     public static final ConfigOption<ScreenshotListOrder> DEFAULT_LIST_ORDER = BUILDER.createEnum("default_list_order", ScreenshotListOrder.class, ScreenshotListOrder.ASCENDING);
+    public static final ConfigOption<SortingCriterion> DEFAULT_LIST_SORTING_CRITERION = BUILDER.createEnum("default_list_sorting_criterion", SortingCriterion.class, SortingCriterion.NAME);
     public static final ConfigOption<Boolean> PROMPT_WHEN_DELETING_SCREENSHOT = BUILDER.createBool("prompt_when_deleting_screenshot", true);
     public static final ConfigOption<Boolean> ENABLE_SCREENSHOT_ENLARGEMENT_ANIMATION = BUILDER.createBool("enable_screenshot_enlargement_animation", true);
     public static final ConfigOption<Boolean> DISPLAY_HINT_TOOLTIP = BUILDER.createBool("display_hint_tooltip", true);
     public static final ConfigOption<Boolean> RENDER_WIDE_PROPERTIES_BUTTON = BUILDER.createBool("render_wide_properties_button", true);
     public static final ConfigOption<Boolean> INVERT_ZOOM_DIRECTION = BUILDER.createBool("invert_zoom_direction", false);
-    public static final ConfigOption<Integer> INITIAL_SCREENSHOT_AMOUNT_PER_ROW = BUILDER.createInt("initial_screenshot_amount_per_row", 4, 2, 8);
-    public static final ConfigOption<Integer> SCREEN_SCROLL_SPEED = BUILDER.createInt("screen_scroll_speed", 10, 1, 50);
+    public static final ConfigOption<Integer> INITIAL_SCREENSHOT_AMOUNT_PER_ROW = BUILDER.createInt("initial_screenshot_amount_per_row", 4, 1, 10);
+    public static final ConfigOption<Integer> SCREEN_SCROLL_SPEED = BUILDER.createInt("screen_scroll_speed", 10, 1, 100);
     public static final ConfigOption<ARGBColor> SCREENSHOT_ELEMENT_BACKGROUND_COLOR = BUILDER.put(new ARGBColor.Option("screenshot_element_background_color", ARGBColor.WHITE, "ingui"));
     public static final ConfigOption<VisibilityState> SCREENSHOT_ELEMENT_TEXT_VISIBILITY = BUILDER.createEnum("screenshot_element_text_visibility", VisibilityState.class, VisibilityState.VISIBLE);
     public static final ConfigOption<ARGBColor> SCREENSHOT_ELEMENT_TEXT_COLOR = BUILDER.put(new ARGBColor.Option("screenshot_element_text_color", ARGBColor.WHITE, "ingui"));

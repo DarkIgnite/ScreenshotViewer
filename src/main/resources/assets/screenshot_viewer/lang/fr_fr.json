@@ -26,6 +26,7 @@
   "screen.screenshot_viewer.button_placement.edit": "Changer la position",
   "screen.screenshot_viewer.button_placement.movement": "Click droit pour bouger l'élément à la position du curseur.",
   "screen.screenshot_viewer.button_placement.confirm": "Tapez ENTREE pour confirmer, ECHAP pour quitter sans sauvegarger, C pour annuler, R pour réinitialiser à la valeur par défaut.",
+  "tooltip.screenshot_viewer.button.sorting_criterion": "Tier par: %s",
 
   "screen.screenshot_viewer.config": "Config de Screenshot Viewer",
   "config.screenshot_viewer.show_button_in_game_pause_menu": "Afficher le bouton dans le menu Pause",
@@ -52,8 +53,12 @@
   "config.screenshot_viewer.pause_menu_button_offset.desc": "Le décalage en pixel du bouton pour accéder à l'interface apparaissant dans le menu Pause (de 0 à ce que vous voulez).",
   "config.screenshot_viewer.screenshots_folder": "Dossier des captures d'écran",
   "config.screenshot_viewer.screenshots_folder.desc": "The path to the folder containing the screenshots images that will be displayed in the screen.",
-  "config.screenshot_viewer.redirect_screenshot_chat_links": "Rediriger les liens de capture d'écran du tchat",
-  "config.screenshot_viewer.redirect_screenshot_chat_links.desc": "Si l'option est active, lorsque vous cliquerez sur le lien affiché dans le tchat après avoir pris une capture d'écran, le gestionnaire s'ouvrira et sélectionnera celle-ci.",
+  "config.screenshot_viewer.saved_screenshot_message_state": "Etat du message de capture enregistrée",
+  "config.screenshot_viewer.saved_screenshot_message_state.desc": "Change l'état/l'action sur le message affiché après la capture de l'écran.",
+  "config.screenshot_viewer.save_screenshot_to_clipboard": "Enregistrer la capture dans le presse-papier",
+  "config.screenshot_viewer.save_screenshot_to_clipboard.desc": "Si la capture d'écran qui vient d'être prise devrait être enregistrée dans le presse-papier directement.",
+  "config.screenshot_viewer.default_list_sorting_criterion": "Critère de tri des captures par défaut",
+  "config.screenshot_viewer.default_list_sorting_criterion.desc": "Le critère de tri par défault pour les captures d'écran.",
   "config.screenshot_viewer.screenshot_element_text_visibility": "Visibilité des Noms de Captures",
   "config.screenshot_viewer.screenshot_element_text_visibility.desc": "L'état de visibilité des noms des captures d'écran.",
   "config.screenshot_viewer.invert_zoom_direction": "Inversion du Zoom",
@@ -77,6 +82,11 @@
 
   "toast.screenshot_viewer.copy_success": "Capture copiée avec succès!",
   "toast.screenshot_viewer.copy_fail": "La capture n'a pas pu être copiée: %s",
+
+  "sorting_criterion.screenshot_viewer.name": "Nom",
+  "sorting_criterion.screenshot_viewer.date": "Date",
+  "sorting_criterion.screenshot_viewer.type": "Type",
+  "sorting_criterion.screenshot_viewer.size": "Taille",
 
   "key.screenshot_viewer.open_screenshots_screen": "Ouvrir le Gestionnaire de Captures d'écran"
 }

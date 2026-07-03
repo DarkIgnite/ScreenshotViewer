@@ -1,36 +1,40 @@
 package io.github.lgatodu47.screenshot_viewer.screen.manage_screenshots;
 
 import com.mojang.logging.LogUtils;
-import io.github.lgatodu47.catconfig.CatConfig;
 import io.github.lgatodu47.catconfigmc.screen.ConfigListener;
 import io.github.lgatodu47.screenshot_viewer.ScreenshotThumbnailManager;
 import io.github.lgatodu47.screenshot_viewer.ScreenshotViewer;
 import io.github.lgatodu47.screenshot_viewer.ScreenshotViewerUtils;
+import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerConfig;
 import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerOptions;
+import io.github.lgatodu47.screenshot_viewer.config.SortingCriterion;
 import io.github.lgatodu47.screenshot_viewer.screen.IconButtonWidget;
 import io.github.lgatodu47.screenshot_viewer.screen.ScreenshotViewerConfigScreen;
 import io.github.lgatodu47.screenshot_viewer.screen.ScreenshotViewerTexts;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
 import net.minecraft.client.gui.components.Button;
-import org.joml.Matrix3x2fStack;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipPositioner;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.CharacterEvent;
 
 import java.io.File;
 import java.util.List;
@@ -39,7 +43,7 @@ import java.util.function.Supplier;
 
 public class ManageScreenshotsScreen extends Screen implements ConfigListener, OldParentElementMethods {
     // Package-private config instance accessible in all the package classes
-    static final CatConfig CONFIG = ScreenshotViewer.getInstance().getConfig();
+    static final ScreenshotViewerConfig CONFIG = ScreenshotViewer.getInstance().getConfig();
     static final ScreenshotThumbnailManager THUMBNAILS = ScreenshotViewer.getInstance().getThumbnailManager();
     static final Logger LOGGER = LogUtils.getLogger();
 
@@ -68,7 +72,7 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
         this.parent = parent;
         this.enlargedScreenshot = new EnlargedScreenshotScreen(this::showScreenshotProperties);
         this.screenshotProperties = new ScreenshotPropertiesMenu(this::client);
-        this.enlargeAnimation = CONFIG.getOrFallback(ScreenshotViewerOptions.ENABLE_SCREENSHOT_ENLARGEMENT_ANIMATION, true);
+        this.enlargeAnimation = CONFIG.getBoolOrTrue(ScreenshotViewerOptions.ENABLE_SCREENSHOT_ENLARGEMENT_ANIMATION);
     }
 
     public ManageScreenshotsScreen(Screen parent, @Nullable File enlargedScreenshotFile) {
@@ -140,15 +144,23 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
                 return list == null ? null : list.isInvertedOrder() ? DESCENDING_ORDER_ICON : ASCENDING_ORDER_ICON;
             }
         });
+        // Sorting by names button
+        addRenderableWidget(new SortingCriterionButton(spacing + btnSize, btnY, btnSize, SortingCriterion.NAME, list));
+        // Sorting by date button
+        addRenderableWidget(new SortingCriterionButton(spacing + btnSize * 2, btnY, btnSize, SortingCriterion.DATE, list));
+        // Sorting by type button
+        addRenderableWidget(new SortingCriterionButton(spacing + btnSize * 3, btnY, btnSize, SortingCriterion.TYPE, list));
+        // Sorting by size button
+        addRenderableWidget(new SortingCriterionButton(spacing + btnSize * 4, btnY, btnSize, SortingCriterion.SIZE, list));
         // Screenshot Folder Button
-        addRenderableWidget(new ExtendedTexturedButtonWidget(spacing * 2 + btnSize, btnY, btnSize, btnSize, OPEN_FOLDER_ICON, _ -> {
+        addRenderableWidget(new ExtendedTexturedButtonWidget(spacing * 2 + btnSize * 5, btnY, btnSize, btnSize, OPEN_FOLDER_ICON, _ -> {
             Util.getPlatform().openFile(CONFIG.getOrFallback(ScreenshotViewerOptions.SCREENSHOTS_FOLDER, (Supplier<? extends File>) ScreenshotViewerUtils::getVanillaScreenshotsFolder));
         }, ScreenshotViewerTexts.OPEN_FOLDER, ScreenshotViewerTexts.OPEN_FOLDER));
         // Done/Delete n screenshots Button
         addRenderableWidget(new ExtendedButtonWidget((width - bigBtnWidth) / 2, btnY, bigBtnWidth, btnHeight, CommonComponents.GUI_DONE, _ -> {
             List<ScreenshotWidget> toDelete = list.deletionList();
             if(fastDelete && !toDelete.isEmpty()) {
-                if(CONFIG.getOrFallback(ScreenshotViewerOptions.PROMPT_WHEN_DELETING_SCREENSHOT, true)) {
+                if(CONFIG.getBoolOrTrue(ScreenshotViewerOptions.PROMPT_WHEN_DELETING_SCREENSHOT)) {
                     setDialogScreen(new ConfirmDeletionScreen(value -> {
                         if(value) {
                             toDelete.forEach(ScreenshotWidget::deleteScreenshot);
@@ -443,11 +455,11 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
     @Override // From ConfigListener
     public void configUpdated() {
         this.list.onConfigUpdate();
-        this.enlargeAnimation = CONFIG.getOrFallback(ScreenshotViewerOptions.ENABLE_SCREENSHOT_ENLARGEMENT_ANIMATION, true);
+        this.enlargeAnimation = CONFIG.getBoolOrTrue(ScreenshotViewerOptions.ENABLE_SCREENSHOT_ENLARGEMENT_ANIMATION);
     }
 
-    public static class ExtendedButtonWidget extends Button.Plain implements CustomHoverState {
-        public ExtendedButtonWidget(int x, int y, int width, int height, net.minecraft.network.chat.Component message, OnPress onPress) {
+    public static class ExtendedButtonWidget extends Button implements CustomHoverState {
+        public ExtendedButtonWidget(int x, int y, int width, int height, Component message, OnPress onPress) {
             super(x, y, width, height, message, onPress, Supplier::get);
         }
 
@@ -458,6 +470,13 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
             }
             this.extractWidgetRenderState(context, mouseX, mouseY, delta);
         }
+
+        @Override
+        protected void extractContents(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, DEFAULT_BUTTON_TEXTURES.get(isActive(), isHoveredOrFocused()), getX(), getY(), getWidth(), getHeight(), ARGB.white(getAlpha()));
+            this.extractDefaultLabel(graphics.textRendererForWidget(this, GuiGraphicsExtractor.HoveredTextEffects.NONE));
+        }
+
         @Override
         public boolean isHoveredOrFocused() {
             return isHovered();
@@ -471,10 +490,10 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
 
     public static class ExtendedTexturedButtonWidget extends IconButtonWidget implements CustomHoverState {
         @Nullable
-        private final net.minecraft.network.chat.Component tooltip;
+        private final Component tooltip;
         private boolean offsetTooltip;
 
-        public ExtendedTexturedButtonWidget(int x, int y, int width, int height, @Nullable Identifier texture, OnPress pressAction, @Nullable net.minecraft.network.chat.Component tooltip, net.minecraft.network.chat.Component text) {
+        public ExtendedTexturedButtonWidget(int x, int y, int width, int height, @Nullable Identifier texture, OnPress pressAction, @Nullable Component tooltip, net.minecraft.network.chat.Component text) {
             super(x, y, width, height, text, texture, pressAction);
             this.tooltip = tooltip;
         }
@@ -494,14 +513,14 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
         }
 
         private void applyTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
-            net.minecraft.network.chat.Component tooltipText = getTooltipText();
+            Component tooltipText = getTooltipText();
             if (tooltipText != null && isHovered()) {
                 context.setTooltipForNextFrame(Minecraft.getInstance().font, List.of(tooltipText.getVisualOrderText()), getTooltipPositioner(), mouseX, mouseY, isFocused());
             }
         }
 
         @Nullable
-        protected net.minecraft.network.chat.Component getTooltipText() {
+        protected Component getTooltipText() {
             return tooltip;
         }
 
@@ -518,6 +537,39 @@ public class ManageScreenshotsScreen extends Screen implements ConfigListener, O
         @Override
         public void updateHoveredState(int mouseX, int mouseY) {
             this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
+        }
+    }
+
+    static class SortingCriterionButton extends ExtendedButtonWidget {
+        private final SortingCriterion criterion;
+        private final ScreenshotList list;
+        private final List<FormattedCharSequence> tooltipText;
+
+        public SortingCriterionButton(int x, int y, int btnSize, SortingCriterion criterion, ScreenshotList list) {
+            super(x, y, btnSize, btnSize, Component.literal(criterion.firstLetter()), _ -> list.sortBy(criterion));
+            this.criterion = criterion;
+            this.list = list;
+            this.tooltipText = List.of(Component.translatable("tooltip.screenshot_viewer.button.sorting_criterion", criterion.nameComponent()).getVisualOrderText());
+        }
+
+        @Override
+        public void extractRenderState(@NonNull GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+            if (!this.visible) {
+                return;
+            }
+            super.extractWidgetRenderState(context, mouseX, mouseY, delta);
+            applyTooltip(context, mouseX, mouseY);
+        }
+
+        private void applyTooltip(GuiGraphicsExtractor context, int mouseX, int mouseY) {
+            if (isHovered()) {
+                context.setTooltipForNextFrame(Minecraft.getInstance().font, tooltipText, DefaultTooltipPositioner.INSTANCE, mouseX, mouseY, isFocused());
+            }
+        }
+
+        @Override
+        public boolean isActive() {
+            return super.isActive() && !list.sortingBy().equals(criterion);
         }
     }
 

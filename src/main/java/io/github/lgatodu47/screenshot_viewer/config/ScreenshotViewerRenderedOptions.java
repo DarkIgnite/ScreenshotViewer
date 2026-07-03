@@ -32,11 +32,13 @@ public class ScreenshotViewerRenderedOptions {
                         ConfigureButtonPlacementScreen.WidgetRemover.ofPredicate(IconButtonWidget.class::isInstance),
                         () -> config.getOrFallback(SHOW_BUTTON_ON_TITLE_SCREEN, true))
         ).setCommonTranslationKey(translation("config", "title_screen_button_position")).build();
-        BUILDER.ofBoolean(REDIRECT_SCREENSHOT_CHAT_LINKS).setCommonTranslationKey(translation("config", "redirect_screenshot_chat_links")).build();
+        BUILDER.ofEnum(SAVED_SCREENSHOT_MESSAGE_STATE, SavedScreenshotMessageState.class).setCommonTranslationKey(translation("config", "saved_screenshot_message_state")).build();
+        BUILDER.ofBoolean(SAVE_SCREENSHOT_TO_CLIPBOARD).setCommonTranslationKey(translation("config", "save_screenshot_to_clipboard")).build();
         BUILDER.withCategoryName("ingame", translatable("config_category", "ingame"));
 
         BUILDER.option(SCREENSHOTS_FOLDER).setWidgetFactory(config -> FileOption.createDirectoryWidget(config, SCREENSHOTS_FOLDER)).setCommonTranslationKey(translation("config", "screenshots_folder")).build();
         BUILDER.ofEnum(DEFAULT_LIST_ORDER, ScreenshotListOrder.class).setCommonTranslationKey(translation("config", "default_list_order")).build();
+        BUILDER.ofEnum(DEFAULT_LIST_SORTING_CRITERION, SortingCriterion.class).setCommonTranslationKey(translation("config", "default_list_sorting_criterion")).build();
         BUILDER.ofBoolean(PROMPT_WHEN_DELETING_SCREENSHOT).setCommonTranslationKey(translation("config", "prompt_when_deleting_screenshot")).build();
         BUILDER.ofBoolean(ENABLE_SCREENSHOT_ENLARGEMENT_ANIMATION).setCommonTranslationKey(translation("config", "enable_screenshot_enlargement_animation")).build();
         BUILDER.ofBoolean(RENDER_WIDE_PROPERTIES_BUTTON).setCommonTranslationKey(translation("config", "render_wide_properties_button")).build();

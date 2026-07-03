@@ -148,7 +148,7 @@ class ScreenshotPropertiesMenu extends AbstractContainerEventHandler implements 
                 Identifier.fromNamespaceAndPath(ScreenshotViewer.MODID, "textures/gui/sprites/widget/properties_button_hovered.png")
         );
 
-        private boolean renderWide = ManageScreenshotsScreen.CONFIG.getOrFallback(ScreenshotViewerOptions.RENDER_WIDE_PROPERTIES_BUTTON, true);
+        private boolean renderWide = ManageScreenshotsScreen.CONFIG.getBoolOrTrue(ScreenshotViewerOptions.RENDER_WIDE_PROPERTIES_BUTTON);
 
         public Button(Identifier texture, net.minecraft.network.chat.Component title, OnPress pressAction) {
             super(0, 0, BUTTON_SIZE, BUTTON_SIZE, title, texture, pressAction);
@@ -156,7 +156,7 @@ class ScreenshotPropertiesMenu extends AbstractContainerEventHandler implements 
 
         @Override
         public void setRectangle(int width, int height, int x, int y) {
-            this.renderWide = ManageScreenshotsScreen.CONFIG.getOrFallback(ScreenshotViewerOptions.RENDER_WIDE_PROPERTIES_BUTTON, true);
+            this.renderWide = ManageScreenshotsScreen.CONFIG.getBoolOrTrue(ScreenshotViewerOptions.RENDER_WIDE_PROPERTIES_BUTTON);
             // provided width is for wide while current width is for squared.
             super.setRectangle(renderWide ? width : getWidth(), height, x, y);
         }

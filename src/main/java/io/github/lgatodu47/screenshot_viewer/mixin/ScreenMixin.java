@@ -1,6 +1,7 @@
 package io.github.lgatodu47.screenshot_viewer.mixin;
 
 import io.github.lgatodu47.screenshot_viewer.ScreenshotViewer;
+import io.github.lgatodu47.screenshot_viewer.config.SavedScreenshotMessageState;
 import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerOptions;
 import io.github.lgatodu47.screenshot_viewer.screen.ScreenshotClickEvent;
 import io.github.lgatodu47.screenshot_viewer.screen.manage_screenshots.ManageScreenshotsScreen;
@@ -25,7 +26,7 @@ public abstract class ScreenMixin {
     @Inject(method = "defaultHandleGameClickEvent", at = @At("HEAD"), cancellable = true)
     private static void screenshot_viewer$inject_handleClickEvent(ClickEvent event, Minecraft minecraft, @Nullable Screen activeScreen, CallbackInfo ci) {
         if (event instanceof ScreenshotClickEvent(File screenshotFile)) {
-            if(!minecraft.hasShiftDown() && ScreenshotViewer.getInstance().getConfig().getOrFallback(ScreenshotViewerOptions.REDIRECT_SCREENSHOT_CHAT_LINKS, false)) {
+            if(!minecraft.hasShiftDown() && ScreenshotViewer.getInstance().getConfig().enumEquals(ScreenshotViewerOptions.SAVED_SCREENSHOT_MESSAGE_STATE, SavedScreenshotMessageState.OPEN_MANAGER)) {
                 minecraft.gui.setScreen(new ManageScreenshotsScreen(minecraft.gui.screen(), screenshotFile));
                 ci.cancel();
                 return;

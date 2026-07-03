@@ -1,6 +1,6 @@
 {
   "screen.screenshot_viewer.manage_screenshots": "Manage Screenshots...",
-  "screen.screenshot_viewer.screenshot_manager.zoom": "Zoom Mode (Hold CTRL)",
+  "screen.screenshot_viewer.screenshot_manager.zoom": "Zoom Mode (Hold CTRL then scroll)",
   "screen.screenshot_viewer.screenshot_manager.fast_delete": "Fast Delete Mode",
   "screen.screenshot_viewer.screenshot_manager.no_screenshots": "Looks like you have not taken any screenshot yet!",
   "screen.screenshot_viewer.screenshot_manager.delete_n_screenshots": "Delete %d screenshot(s)",
@@ -26,6 +26,7 @@
   "screen.screenshot_viewer.button_placement.confirm": "Type ENTER to confirm, ESCAPE to quit without saving, C to cancel, R to reset to default.",
   "tooltip.screenshot_viewer.redirect_to_screenshot_manager": "Open screenshot in the Screenshot Manager...",
   "tooltip.screenshot_viewer.menu_hint": "Right-click to manage \nHit CTRL-C to copy to clipboard",
+  "tooltip.screenshot_viewer.button.sorting_criterion": "Sort by: %s",
 
   "screen.screenshot_viewer.config": "Screenshot Viewer Config",
   "config.screenshot_viewer.show_button_in_game_pause_menu": "Show Button In Pause Menu",
@@ -36,12 +37,16 @@
   "config.screenshot_viewer.show_button_on_title_screen.desc": "Shows a button to access screenshots directly on the title screen.",
   "config.screenshot_viewer.title_screen_button_position": "Title Screen Button Position",
   "config.screenshot_viewer.title_screen_button_position.desc": "Position of the screenshots button on the title screen.",
+  "config.screenshot_viewer.saved_screenshot_message_state": "Saved Screenshot Message State",
+  "config.screenshot_viewer.saved_screenshot_message_state.desc": "Changes the state of the 'Saved screenshot...' message printed when taking a screenshot.",
+  "config.screenshot_viewer.save_screenshot_to_clipboard": "Save Taken Screenshot To Clipboard",
+  "config.screenshot_viewer.save_screenshot_to_clipboard.desc": "Whether the screenshot you just took should be saved in your clipboard.",
   "config.screenshot_viewer.enable_screenshot_enlargement_animation": "Enable Screenshot Enlargement Animation",
   "config.screenshot_viewer.enable_screenshot_enlargement_animation.desc": "Whether a growing animation should play when a screenshot on the screen is clicked to be enlarged.",
   "config.screenshot_viewer.prompt_when_deleting_screenshot": "Prompt When Deleting Screenshot",
   "config.screenshot_viewer.prompt_when_deleting_screenshot.desc": "Warns you with a confirmation screen when trying to delete a screenshot.",
   "config.screenshot_viewer.initial_screenshot_amount_per_row": "Initial Screenshot Amount Per Row",
-  "config.screenshot_viewer.initial_screenshot_amount_per_row.desc": "Number of screenshots to be displayed per row when the screen is opened (from 2 to 8).",
+  "config.screenshot_viewer.initial_screenshot_amount_per_row.desc": "Number of screenshots to be displayed per row when the screen is opened (from 1 to 10).",
   "config.screenshot_viewer.screen_scroll_speed": "Scroll speed",
   "config.screenshot_viewer.screen_scroll_speed.desc": "Scroll speed of the screen (from 1 to 50).",
   "config.screenshot_viewer.screenshot_element_background_color": "Background Color of the Screenshot Elements",
@@ -52,12 +57,12 @@
   "config.screenshot_viewer.screenshot_element_text_color.desc": "Color of the texts describing the screenshots elements.",
   "config.screenshot_viewer.default_list_order": "Default Screenshot List Ordering",
   "config.screenshot_viewer.default_list_order.desc": "The ordering of the screenshots when the screen is opened.",
+  "config.screenshot_viewer.default_list_sorting_criterion": "Default Screenshot List Sorting Criterion",
+  "config.screenshot_viewer.default_list_sorting_criterion.desc": "The default criterion for sorting the screenshot list when the screen is opened.",
   "config.screenshot_viewer.pause_menu_button_offset": "Pause Menu Button Offset",
   "config.screenshot_viewer.pause_menu_button_offset.desc": "The offset in pixels of the screenshot manager button if shown in the pause menu (from 0 to how much you want).",
   "config.screenshot_viewer.screenshots_folder": "Screenshots Folder",
   "config.screenshot_viewer.screenshots_folder.desc": "The path to the folder containing the screenshots images that will be displayed in the screen.",
-  "config.screenshot_viewer.redirect_screenshot_chat_links": "Redirect Screenshot Chat Links",
-  "config.screenshot_viewer.redirect_screenshot_chat_links.desc": "If enabled, clicking on the link printed in the chat when taking a screenshot will open it directly in the screenshot manager.",
   "config.screenshot_viewer.screenshot_element_text_visibility": "Screenshot Names Visibility",
   "config.screenshot_viewer.screenshot_element_text_visibility.desc": "The visibility state of the screenshots names.",
   "config.screenshot_viewer.invert_zoom_direction": "Invert Zoom Direction",
@@ -77,6 +82,11 @@
 
   "toast.screenshot_viewer.copy_success": "Successfully copied screenshot!",
   "toast.screenshot_viewer.copy_fail": "Failed to copy screenshot: %s",
+
+  "sorting_criterion.screenshot_viewer.name": "Name",
+  "sorting_criterion.screenshot_viewer.date": "Date",
+  "sorting_criterion.screenshot_viewer.type": "Type",
+  "sorting_criterion.screenshot_viewer.size": "Size",
 
   "key.screenshot_viewer.open_screenshots_screen": "Open Screenshot Manager"
 }

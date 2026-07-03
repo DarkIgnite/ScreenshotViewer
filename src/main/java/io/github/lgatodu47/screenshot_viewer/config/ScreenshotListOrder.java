@@ -5,6 +5,6 @@ public enum ScreenshotListOrder {
     DESCENDING;
 
     public boolean isInverted() {
-        return this == DESCENDING;
+        return this == ASCENDING;
     }
 }

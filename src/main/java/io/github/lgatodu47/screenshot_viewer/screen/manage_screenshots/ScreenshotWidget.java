@@ -86,9 +86,9 @@ final class ScreenshotWidget extends AbstractWidget implements AutoCloseable, Sc
         this.textVisibility = CONFIG.getOrFallback(ScreenshotViewerOptions.SCREENSHOT_ELEMENT_TEXT_VISIBILITY, VisibilityState.VISIBLE);
         this.backgroundColor = CONFIG.getOrFallback(ScreenshotViewerOptions.SCREENSHOT_ELEMENT_BACKGROUND_COLOR, ARGBColor.WHITE);
         this.textColor = CONFIG.getOrFallback(ScreenshotViewerOptions.SCREENSHOT_ELEMENT_TEXT_COLOR, ARGBColor.WHITE);
-        this.renderTextShadow = CONFIG.getOrFallback(ScreenshotViewerOptions.RENDER_SCREENSHOT_ELEMENT_FONT_SHADOW, true);
-        this.promptOnDelete = CONFIG.getOrFallback(ScreenshotViewerOptions.PROMPT_WHEN_DELETING_SCREENSHOT, true);
-        this.hintTooltip = CONFIG.getOrFallback(ScreenshotViewerOptions.DISPLAY_HINT_TOOLTIP, false) ? ScreenshotViewerUtils.toColoredComponents(client, ScreenshotViewerTexts.translatable("tooltip", "menu_hint").withStyle(ChatFormatting.GRAY)) : List.of();
+        this.renderTextShadow = CONFIG.getBoolOrTrue(ScreenshotViewerOptions.RENDER_SCREENSHOT_ELEMENT_FONT_SHADOW);
+        this.promptOnDelete = CONFIG.getBoolOrTrue(ScreenshotViewerOptions.PROMPT_WHEN_DELETING_SCREENSHOT);
+        this.hintTooltip = CONFIG.getBool(ScreenshotViewerOptions.DISPLAY_HINT_TOOLTIP) ? ScreenshotViewerUtils.toColoredComponents(client, ScreenshotViewerTexts.translatable("tooltip", "menu_hint").withStyle(ChatFormatting.GRAY)) : List.of();
     }
 
     void updateHoverState(int mouseX, int mouseY, int viewportY, int viewportBottom, boolean updateHoverState) {

@@ -1,7 +1,6 @@
 package io.github.lgatodu47.screenshot_viewer;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import io.github.lgatodu47.catconfig.CatConfig;
 import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerConfig;
 import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerOptions;
 import io.github.lgatodu47.screenshot_viewer.config.WidgetPositionOption;
@@ -26,6 +25,7 @@ import net.minecraft.util.Util;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class ScreenshotViewer implements ClientModInitializer {
@@ -33,7 +33,7 @@ public class ScreenshotViewer implements ClientModInitializer {
 
     private static ScreenshotViewer instance;
 
-    private CatConfig config;
+    private ScreenshotViewerConfig config;
     private ScreenshotThumbnailManager thumbnailManager;
     private KeyMapping openScreenshotsScreenKey;
 
@@ -63,10 +63,11 @@ public class ScreenshotViewer implements ClientModInitializer {
             }
         });
         ScreenEvents.AFTER_INIT.register(DELAYED_PHASE, (client, screen, _, _) -> {
-            if(config.getOrFallback(ScreenshotViewerOptions.SHOW_BUTTON_IN_GAME_PAUSE_MENU, true) && config.get(ScreenshotViewerOptions.PAUSE_MENU_BUTTON_POSITION).isPresent() && screen instanceof PauseScreen) {
+            Optional<WidgetPositionOption.WidgetPosition> pauseMenuPosOpt = config.get(ScreenshotViewerOptions.PAUSE_MENU_BUTTON_POSITION);
+            if(screen instanceof PauseScreen && config.getBoolOrTrue(ScreenshotViewerOptions.SHOW_BUTTON_IN_GAME_PAUSE_MENU) && pauseMenuPosOpt.isPresent()) {
                 List<AbstractWidget> buttons = Screens.getWidgets(screen);
 
-                WidgetPositionOption.WidgetPosition widgetPos = config.get(ScreenshotViewerOptions.PAUSE_MENU_BUTTON_POSITION).get();
+                WidgetPositionOption.WidgetPosition widgetPos = pauseMenuPosOpt.get();
                 int x = widgetPos.x(), y = widgetPos.y();
                 if(!buttons.isEmpty()) {
                     AbstractWidget referenceWidget = buttons.getFirst();
@@ -78,10 +79,11 @@ public class ScreenshotViewer implements ClientModInitializer {
                     client.gui.setScreen(new ManageScreenshotsScreen(screen));
                 }), btn -> btn.setTooltip(Tooltip.create(ScreenshotViewerTexts.MANAGE_SCREENSHOTS))));
             }
-            if(config.getOrFallback(ScreenshotViewerOptions.SHOW_BUTTON_ON_TITLE_SCREEN, true) && config.get(ScreenshotViewerOptions.TITLE_SCREEN_BUTTON_POSITION).isPresent() && screen instanceof TitleScreen) {
+            Optional<WidgetPositionOption.WidgetPosition> titleScreenPosOpt = config.get(ScreenshotViewerOptions.PAUSE_MENU_BUTTON_POSITION);
+            if(screen instanceof TitleScreen && config.getBoolOrTrue(ScreenshotViewerOptions.SHOW_BUTTON_ON_TITLE_SCREEN) && titleScreenPosOpt.isPresent()) {
                 List<AbstractWidget> buttons = Screens.getWidgets(screen);
 
-                WidgetPositionOption.WidgetPosition widgetPos = config.get(ScreenshotViewerOptions.TITLE_SCREEN_BUTTON_POSITION).get();
+                WidgetPositionOption.WidgetPosition widgetPos = titleScreenPosOpt.get();
                 int x = widgetPos.x(), y = widgetPos.y();
                 if(!buttons.isEmpty()) {
                     AbstractWidget referenceWidget = buttons.getFirst();
@@ -96,7 +98,7 @@ public class ScreenshotViewer implements ClientModInitializer {
         ScreenEvents.AFTER_INIT.addPhaseOrdering(Event.DEFAULT_PHASE, DELAYED_PHASE);
     }
 
-    public CatConfig getConfig() {
+    public ScreenshotViewerConfig getConfig() {
         return config;
     }
 

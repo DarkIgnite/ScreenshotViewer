@@ -9,6 +9,7 @@ import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import io.github.lgatodu47.screenshot_viewer.ScreenshotViewer;
+import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerConfig;
 import io.github.lgatodu47.screenshot_viewer.config.ScreenshotViewerOptions;
 import io.github.lgatodu47.screenshot_viewer.screen.IconButtonWidget;
 import io.github.lgatodu47.screenshot_viewer.screen.ScreenshotViewerTexts;
@@ -36,8 +37,8 @@ public abstract class TitleScreenMixin {
     @Expression("numberOfButtons = ?")
     @Inject(method = "init", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER))
     private void screenshot_viewer$inject_updateButtonNumber(CallbackInfo ci, @Local(name = "numberOfButtons") LocalIntRef numberOfButtons, @Share("addManagerButton") LocalBooleanRef addManagerButton) {
-        if(ScreenshotViewer.getInstance().getConfig().getOrFallback(ScreenshotViewerOptions.SHOW_BUTTON_ON_TITLE_SCREEN, true)
-        && ScreenshotViewer.getInstance().getConfig().get(ScreenshotViewerOptions.TITLE_SCREEN_BUTTON_POSITION).isEmpty()) {
+        ScreenshotViewerConfig config = ScreenshotViewer.getInstance().getConfig();
+        if(config.getBoolOrTrue(ScreenshotViewerOptions.SHOW_BUTTON_ON_TITLE_SCREEN) && config.get(ScreenshotViewerOptions.TITLE_SCREEN_BUTTON_POSITION).isEmpty()) {
             addManagerButton.set(true);
             numberOfButtons.set(numberOfButtons.get() + 1);
         }
